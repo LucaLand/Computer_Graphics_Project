@@ -1,0 +1,4 @@
+- Aggiungere illuminazione a ProvaCubo al cubo che ho fatto
+- fare una UI per abilitare o disabilitare le ombre e l'illuminazione
+-Provare caricare più cubi con un file OBJ copiando quello fatto in prova cubo nello stesso canvas.
+
