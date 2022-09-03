@@ -42,6 +42,8 @@ var keydown = function(e) {
     case 39 : target.translateL(-0.1, 0, 0, m4.identity()); break;       //Ferccia Dx
     case 104 : target.translateL(0, 0, 0.1, m4.identity()); break;
     case 98 : target.translateL(0, 0, -0.1, m4.identity()); break;
+    case 97 : CAMERA_MANAGER.changeCameraView(0); break;         //NUMpad 1
+    case 99 : CAMERA_MANAGER.changeCameraView(1); break;        //NumPad 3
   }
   log("pos: " + target.position.toString());
   GL_DRAWER.drawScene();
