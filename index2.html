@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+      <!--per ricaricare sempre la pagina da zero e non usare la cache-->
+      <META HTTP-EQUIV=”Pragma” CONTENT=”no-cache”>
+      <META HTTP-EQUIV=”Cache-Control” CONTENT=”no-cache”>
+      <!--per definire la dimensione e posizione dell'elemento canvas;
+        se i valori di width ed height inpostati qui sono superiori a
+        corrispondenti settati in <canvas width= .. height=.. l'immagine
+        verra' adattata ingrandendola, mentre se i valori sono inferiori,
+        l'iimagine verra' adattata rimpicciolendola-->
+        <link rel="stylesheet" href="./test/proveCubo.css">
+        
+   </head>
+<body>
+
+<div class="container"> 
+  <!-- to manage text on canvas and webgl -->
+  <canvas width="1000" height="1000" id="my_Canvas"></canvas>
+  <canvas width="500" height="200" id="text"></canvas>
+</div>
+
+
+
+
+<!-- JS SCRIPT -->
+<script src="./test/proveCubo.js"></script>
+</body>
+
+</html>  
