@@ -1,0 +1,7 @@
+Exoprt Obj with:
+
+[Forward]   : Y Forward
+[Up]        : Z Up
+
+Add Texture in .mtl files:
+## map_Kd {nomefile}.png

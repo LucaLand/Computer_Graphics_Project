@@ -1,15 +1,16 @@
 /*============= ENV ============================*/
-var ENV;
+var ENV, ENV2;
 //var SHADERS;
 var GL;
 var then = 0;
-var modelXRotationRadians = degToRad(0);
-var CAMERA_MANAGER;
+var CAMERA_MANAGER, CubeController;
+var CAMERA_MODE = 1;			//0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
+var targetObject = null;
 
-function createEnv() {
+function createEnv(canvasId) {
 	log("createEnv() | creating environment...");
 
-	var canvas = document.getElementById('my_Canvas');
+	var canvas = document.getElementById(canvasId);
 	log("createEnv() | canvas: " + canvas);
 	gl = canvas.getContext('webgl');
 	if(!gl) {
@@ -33,7 +34,8 @@ function createEnv() {
 
 function init() {
 	log("init() | starting...")
-	ENV = createEnv();
+	ENV = createEnv('my_Canvas');
+	//ENV2 = createEnv('obj_canvas');
 	GL = ENV.gl;
 	log("init() | ENV created")
 
@@ -64,23 +66,30 @@ function init() {
 	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
 
+	
+
 	//GL_DRAWER.fov = degToRad(100);
 	//GL_DRAWER.cameraPosition = [10, 10, 1];
-	attachHandlers(ENV.canvas, MESH_MANAGER.get('cube1'));
+	
 	log("init() | handlers attached");
-
-	CAMERA_MANAGER = createCameraManager(cube);
-	CAMERA_MANAGER.setCameraPosition(-1, -1, 1);
 }
 
 function main() {
 	init();
 	log("main() | init completed");
-	var cube1 = MESH_MANAGER.get("cube1");
-	//cube1.scalate(0.5, 0.5, 0.5);
+	var obj = MESH_MANAGER.get("cube1");
+	obj.setPosition(0,0,0.25);
+	obj.rotate(90,0);
+	//obj.scalate(0.25, 0.25, 0.25);
+	
+	targetObject = obj;
+	CubeController = new Controller(obj);
+	CAMERA_MANAGER = createCameraManager(obj);
+	attachHandlers(ENV.canvas, obj);
 
+
+	//Start rendering loop
 	requestAnimationFrame(render);
-
 }
 
 function sleep(ms) {
@@ -92,11 +101,8 @@ async function render(time) {
 	time *= 0.001;
 	var delta = time - then;
 	then = time;
-	var cube = MESH_MANAGER.get('cube1')
-	GL_DRAWER.target = cube.position.toArray();
-	//MESH_MANAGER.get('cube1').rotate((-0.7*delta), 0);
-	//log("cameraPosition: " + GL_DRAWER.cameraPosition + ", target: " + GL_DRAWER.target);
-	//log("cubePosition: " + cube.position.toArray());
+	
+	CAMERA_MANAGER.updateGL_DRAWER();
 	GL_DRAWER.drawScene();
 
 	//await sleep(200);

@@ -26,7 +26,7 @@ var mouseMove = function(e) {
   if(!drag) return false;
   dX=(e.pageX-old_x)*2*Math.PI/ENV.canvas.width,
   dY=(e.pageY-old_y)*2*Math.PI/ENV.canvas.height;
-  target.rotate(dX, dY);
+  target.rotate(dX, dY, true);
   old_x=e.pageX, old_y=e.pageY;
   e.preventDefault();
   GL_DRAWER.drawScene();
@@ -36,17 +36,30 @@ var mouseMove = function(e) {
 
 var keydown = function(e) {
   switch(e.keyCode) {
-    case 40 : target.translateL(0, -0.1, 0, m4.identity()); break;      //Freccia Giù
-    case 38 : target.translateL(0, 0.1, 0, m4.identity()); break;       //Freccia Su
-    case 37 : target.translateL(0.1, 0, 0, m4.identity()); break;       //Freccia Sx
-    case 39 : target.translateL(-0.1, 0, 0, m4.identity()); break;       //Ferccia Dx
-    case 104 : target.translateL(0, 0, 0.1, m4.identity()); break;
-    case 98 : target.translateL(0, 0, -0.1, m4.identity()); break;
-    case 97 : CAMERA_MANAGER.changeCameraView(0); break;         //NUMpad 1
-    case 99 : CAMERA_MANAGER.changeCameraView(1); break;        //NumPad 3
+    case 40 : CubeController.move(KEYMOVE.downArrow); break;      	//Freccia Giù
+    case 38 : CubeController.move(KEYMOVE.upArrow); break;       	//Freccia Su
+    case 37 : CubeController.move(KEYMOVE.leftArrow); break;       //Freccia Sx
+    case 39 : CubeController.move(KEYMOVE.rightArrow); break;       	//Ferccia Dx
+    case 104 : trans(0,0,0.1); break;		//NUmpad 8
+	  case 189: 	trans(0,0,-0.1); break;		//-
+    case 96 : 	CAMERA_MANAGER.changeCameraView(0); break;        //NUMpad 0
+    case 97 : 	CAMERA_MANAGER.changeCameraView(1); break;         	//NUMpad 1
+    case 98 : 	CAMERA_MANAGER.changeCameraView(2); break;      	//NUMpad 2
+    case 99 : 	CAMERA_MANAGER.changeCameraView(3); break;          //NumPad 3
+    case 100 :	CAMERA_MANAGER.changeCameraView(4); break;        	//NumPad 4
+    case 101 :	CAMERA_MANAGER.changeCameraView(5); break;			//NumPad 5
+    case 102 :	CAMERA_MANAGER.changeCameraView(0); break;			//NumPad 6
+	case 188: 	CAMERA_MANAGER.incrementCameraFov(-1); break;		//,
+	case 190:	CAMERA_MANAGER.incrementCameraFov(1); break;		//.
   }
   log("pos: " + target.position.toString());
   GL_DRAWER.drawScene();
+}
+
+function trans(x, y, z, translateCamera = false){
+  target.translateL(x, y, z, m4.identity());
+  if(translateCamera)
+  	CAMERA_MANAGER.traslatePosCamera(x, y, z);
 }
 
 function incrementXCam() {

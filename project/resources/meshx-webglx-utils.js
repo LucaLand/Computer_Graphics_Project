@@ -85,6 +85,28 @@ function Position(x, y, z) { /* ****************************************** */
     return new Position(this.x + deltaX, this.y + deltaY, this.z + deltaZ);
   }
 
+  this.distance = function(pos2){
+    var vect1 = this.toArray();
+    var vect2 = pos2.toArray();
+
+    var dx = Math.pow((vect1[0] - vect2[0]), 2);
+    var dy = Math.pow((vect1[1] - vect2[1]), 2);
+    var dz = Math.pow((vect1[2] - vect2[2]), 2);
+
+    return Math.sqrt(dx + dy + dz);
+  }
+
+  this.distanceVector = function(pos2){
+    var vect1 = this.toArray();
+    var vect2 = pos2.toArray();
+
+    var dx = vect1[0] - vect2[0];
+    var dy = vect1[1] - vect2[1];
+    var dz = vect1[2] - vect2[2];
+
+    return [dx, dy, dz];
+  }
+
   this.toArray = function() {
     return [this.x, this.y, this.z];
   }
@@ -216,6 +238,12 @@ function Rotation(theta, phi) { /* *************************************** */
   this.rotate = function(deltaTheta, deltaPhi) {
     this.rotateTheta(deltaTheta);
     this.rotatePhi(deltaPhi);
+    return this;
+  }
+
+  this.rotateDeg = function(deltaTheta, deltaPhi) {
+    this.rotateTheta(degToRad(deltaTheta));
+    this.rotatePhi(degToRad(deltaPhi));
     return this;
   }
 
@@ -547,7 +575,7 @@ function MeshObject(name, data) {
     return [dxR, dyR, dzR];
   }
 
-  this.translateL = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world, relative = true) {
+  this.translateL = function(deltaX, deltaY, deltaZ, relative = false, u_world = this.data.uniforms.u_world) {
     switch(this.limits.type) {
       case "unlimited": return this.translate(deltaX, deltaY, deltaZ, u_world);
       case "linear": {
@@ -572,21 +600,24 @@ function MeshObject(name, data) {
     if(updateMatrix) this.updateUMatrix();
   }
 
-  this.setRotation = function(theta, phi) {
+  this.setRotation = function(theta, phi, updateMatrix = true) {
     this.rotation.theta = theta;
     this.rotation.phi = phi;
     if(updateMatrix) this.updateUMatrix();
   }
 
-  this.setScale = function(sx, sy, sz) {
+  this.setScale = function(sx, sy, sz, updateMatrix = true) {
     this.scale.sx = sx;
     this.scale.sy = sy;
     this.scale.sz = sz;
     if(updateMatrix) this.updateUMatrix();
   }
 
-  this.rotate = function(deltaTheta, deltaPhi, u_world = this.data.uniforms.u_world) {
-    this.rotation.rotate(deltaTheta, deltaPhi);
+  this.rotate = function(deltaTheta, deltaPhi, radMode = false) {
+    if(radMode)
+      this.rotation.rotate(deltaTheta, deltaPhi);
+    else
+      this.rotation.rotateDeg(deltaTheta, deltaPhi);
     this.updateUMatrix();
   }
 

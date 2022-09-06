@@ -125,3 +125,12 @@ function getLocations(program, type, ...varNames) {
 
 	throw new Error("Invalid type \'" + type + "\' for shader location");
 }
+
+/* ======= Utilities ========================================================== */
+function addToAllElements(array, value) {
+	for(var el in array) {
+		array[el] += value;
+	}
+
+	return array;
+}
